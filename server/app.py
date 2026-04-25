@@ -67,3 +67,39 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+@app.get("/training_results")
+def training_results():
+    """Serve real training results for the chart — reads from checkpoints/cpu_run/"""
+    import csv, json as _json
+    results_path = os.path.join(os.path.dirname(__file__), "..", "checkpoints", "cpu_run", "reward_curve.csv")
+    summary_path = os.path.join(os.path.dirname(__file__), "..", "checkpoints", "cpu_run", "training_results.json")
+
+    steps, f1, det, fp = [], [], [], []
+    try:
+        with open(results_path) as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                steps.append(float(row["step"]))
+                f1.append(float(row["overseer_f1"]))
+                det.append(float(row["detection_rate"]))
+                fp.append(float(row["false_positive_rate"]))
+    except FileNotFoundError:
+        raise HTTPException(404, "Training results not found")
+
+    summary = {}
+    try:
+        with open(summary_path) as f:
+            summary = _json.load(f)
+    except Exception:
+        pass
+
+    return {
+        "steps": steps,
+        "f1": f1,
+        "det_rate": det,
+        "fp_rate": fp,
+        "source": "actual_cpu_training_run",
+        "summary": summary,
+    }
