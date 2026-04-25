@@ -1,45 +1,31 @@
-# Python cache
+# Python
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
-*.log
-
-# Virtual environments
-venv/
-env/
-.venv/
-
-# Jupyter
-.ipynb_checkpoints/
-
-# VS Code
-.vscode/
-
-# OS files
-.DS_Store
-Thumbs.db
-
-# Build files
-build/
-dist/
+*.py[cod]
 *.egg-info/
+dist/
+build/
 
-# Large datasets
-data/*.json
-data/*.jsonl
-data/*.csv
-data/*.zip
-data/*.pt
-data/*.bin
-data/*.ckpt
-data/*.model
-
-# Environment secrets
+# Environment
 .env
+.venv/
+venv/
 
-# Local DB
-*.sqlite3
+# Training outputs (too large for git/HF Spaces)
+checkpoints/
+wandb/
 
-# Docker temp
-docker-compose.override.yml
+# Keep reward evidence
+!checkpoints/cpu_run/
+!checkpoints/cpu_run/reward_curve.csv
+!checkpoints/cpu_run/training_results.json
+
+# Data (regenerate with generate_sft_data.py)
+data/
+
+# Misc
+.DS_Store
+.idea/
+.vscode/
+*.pt
+*.safetensors
+sft_episodes.json
